@@ -30,4 +30,9 @@
     </description>
   </class>
   
+  <class name="default_planner_request_adapters/AddCubicTimeParameterization" type="default_planner_request_adapters::AddCubicTimeParameterization" base_class_type="planning_request_adapter::PlanningRequestAdapter">
+    <description>
+    </description>
+  </class>
+
 </library>
