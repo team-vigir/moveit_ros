@@ -170,12 +170,14 @@ void planning_scene_monitor::PlanningSceneMonitor::initialize(const planning_sce
   {
     robot_model_ = rm_loader_->getModel();
     scene_ = scene;
+    collision_loader_.setupScene(nh_, scene_);
     scene_const_ = scene_;
     if (!scene_)
     {
       try
       {
         scene_.reset(new planning_scene::PlanningScene(rm_loader_->getModel()));
+        collision_loader_.setupScene(nh_, scene_);
         scene_const_ = scene_;
         configureCollisionMatrix(scene_);
         configureDefaultPadding();
@@ -214,6 +216,14 @@ void planning_scene_monitor::PlanningSceneMonitor::initialize(const planning_sce
   last_update_time_ = ros::Time::now();
   last_state_update_ = ros::WallTime::now();
   dt_state_update_ = ros::WallDuration(0.1);
+
+  double temp_wait_time;
+  nh_.param(
+      robot_description_ + "_planning/shape_transform_cache_lookup_wait_time",
+      temp_wait_time,
+      0.05);
+  shape_transform_cache_lookup_wait_time_ = ros::Duration(temp_wait_time);
+
   state_update_pending_ = false;
   state_update_timer_ = nh_.createWallTimer(dt_state_update_,
                                             &PlanningSceneMonitor::stateUpdateTimerCallback,
@@ -844,7 +854,7 @@ bool planning_scene_monitor::PlanningSceneMonitor::getShapeTransformCache(const 
     for (LinkShapeHandles::const_iterator it = link_shape_handles_.begin() ; it != link_shape_handles_.end() ; ++it)
     {
       tf::StampedTransform tr;
-      tf_->waitForTransform(target_frame, it->first->getName(), target_time,  ros::Duration(1.0));
+      tf_->waitForTransform(target_frame, it->first->getName(), target_time, shape_transform_cache_lookup_wait_time_);
       tf_->lookupTransform(target_frame, it->first->getName(), target_time, tr);
       Eigen::Affine3d ttr;
       tf::transformTFToEigen(tr, ttr);
@@ -854,7 +864,7 @@ bool planning_scene_monitor::PlanningSceneMonitor::getShapeTransformCache(const 
     for (AttachedBodyShapeHandles::const_iterator it = attached_body_shape_handles_.begin() ; it != attached_body_shape_handles_.end() ; ++it)
     {
       tf::StampedTransform tr;
-      tf_->waitForTransform(target_frame, it->first->getAttachedLinkName(), target_time,  ros::Duration(1.0));
+      tf_->waitForTransform(target_frame, it->first->getAttachedLinkName(), target_time, shape_transform_cache_lookup_wait_time_);
       tf_->lookupTransform(target_frame, it->first->getAttachedLinkName(), target_time, tr);
       Eigen::Affine3d transform;
       tf::transformTFToEigen(tr, transform);
@@ -863,7 +873,7 @@ bool planning_scene_monitor::PlanningSceneMonitor::getShapeTransformCache(const 
     }
     {
       tf::StampedTransform tr;
-      tf_->waitForTransform(target_frame, scene_->getPlanningFrame(), target_time,  ros::Duration(1.0));
+      tf_->waitForTransform(target_frame, scene_->getPlanningFrame(), target_time, shape_transform_cache_lookup_wait_time_);
       tf_->lookupTransform(target_frame, scene_->getPlanningFrame(), target_time, tr);
       Eigen::Affine3d transform;
       tf::transformTFToEigen(tr, transform);

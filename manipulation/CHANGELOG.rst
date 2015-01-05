@@ -2,6 +2,26 @@
 Changelog for package moveit_ros_manipulation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.6.4 (2014-12-20)
+------------------
+
+0.6.3 (2014-12-03)
+------------------
+* trivial fixes for warnings
+* use named logging for manipulation components
+* Contributors: Michael Ferguson
+
+0.6.2 (2014-10-31)
+------------------
+
+0.6.1 (2014-10-31)
+------------------
+
+0.6.0 (2014-10-27)
+------------------
+* Fix bug in place-planning where attached object was not considered in plan.
+* Contributors: Dave Hershberger, Sachin Chitta
+
 0.5.19 (2014-06-23)
 -------------------
 * fixes `#461 <https://github.com/ros-planning/moveit_ros/issues/461>` and a potential segfault

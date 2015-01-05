@@ -2,6 +2,26 @@
 Changelog for package moveit_ros_planning_interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.6.4 (2014-12-20)
+------------------
+
+0.6.3 (2014-12-03)
+------------------
+* include correct boost::*_ptr class for boost 1.57.
+* Contributors: v4hn
+
+0.6.2 (2014-10-31)
+------------------
+
+0.6.1 (2014-10-31)
+------------------
+
+0.6.0 (2014-10-27)
+------------------
+* Add missing variants of place (PlaceLocation, place anywhere) for python interface
+* Python wrapper for getEndEffectorTips()
+* Contributors: Dave Coleman, Sachin Chitta, corot
+
 0.5.19 (2014-06-23)
 -------------------
 * Add check for planning scene monitor connection, with 5 sec delay
