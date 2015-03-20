@@ -2,6 +2,7 @@
  * Software License Agreement (BSD License)
  *
  *  Copyright (c) 2012, Willow Garage, Inc.
+ *  Copyright (c) 2014, TORC Robotics and Team ViGIR.
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -14,7 +15,7 @@
  *     copyright notice, this list of conditions and the following
  *     disclaimer in the documentation and/or other materials provided
  *     with the distribution.
- *   * Neither the name of Willow Garage nor the names of its
+ *   * Neither the name of Willow Garage, TORC Robotics, Team ViGIR, nor the names of its
  *     contributors may be used to endorse or promote products derived
  *     from this software without specific prior written permission.
  *
@@ -32,7 +33,7 @@
  *  POSSIBILITY OF SUCH DAMAGE.
  *********************************************************************/
 
-/* Author: Ioan Sucan */
+/* Author: David Conner (conner@torcrobotics.com) based on code by Ioan Sucan */
 
 #include <moveit/planning_request_adapter/planning_request_adapter.h>
 #include <moveit/trajectory_processing/iterative_cubic_time_parameterization.h>
@@ -69,10 +70,10 @@ public:
     {
       ROS_DEBUG("Running '%s'", getDescription().c_str());
       ros::Time start = ros::Time::now();
-      if (!time_param_.computeTimeStamps(*res.trajectory_))
+      if (!time_param_.computeTimeStamps(*res.trajectory_, req.max_velocity_scaling_factor))
         ROS_WARN("Time parametrization for the solution path failed. (elapsed=%f)",(ros::Time::now()-start).toSec());
       else
-          ROS_INFO("Running '%s' - C3 smoothing in %f seconds", getDescription().c_str(),(ros::Time::now()-start).toSec());
+        ROS_INFO("   Completed '%s' - C3 time parameterization and smoothing in %.4f ms", getDescription().c_str(),1000.0*(ros::Time::now()-start).toSec());
 
     }
 
